@@ -18,3 +18,16 @@ model Display {
   mac_adr         String  @unique
   friendly_name   String
 }
+
+model Asset {
+  id              String     @id @default(cuid())
+  friendly_name   String
+  file_path       String  @unique
+}
+
+model Playlist {
+  id              String     @id @default(cuid())
+  friendly_name   String
+  json            Json
+}
+
