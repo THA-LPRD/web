@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 // Dummy data
 const displays = [
@@ -17,5 +18,9 @@ const displays = [
 ];
 
 export async function GET() {
-  return NextResponse.json(displays);
+    const displays = await prisma.display.findMany();
+
+    return NextResponse.json(displays);
+    //return NextResponse.json(displays);
+  
 }
