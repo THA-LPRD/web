@@ -14,7 +14,7 @@ interface Props {
     params: {mac_adr: string};
 }
 
-export  default async function name({params}: Props) {
+export  default async function showDisplayDetails({params}: Props) {
     /*
     const displays: Display[] = await fetch('http://localhost:3000/api/getDisplays').then(
         (res) => res.json()

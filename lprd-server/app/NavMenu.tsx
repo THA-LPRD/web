@@ -1,4 +1,8 @@
 import Link from 'next/link';
+import { usePathname } from 'next/navigation'
+
+import { ChangeButtons } from './ChangeButtons';
+
 import styles from './NavMenu.module.css';
 
 export default function NavMenu() {
@@ -12,6 +16,7 @@ export default function NavMenu() {
                     <Link href={'/assets'}>Assets</Link>
                 </li>
             </ul>
+            <ChangeButtons/>
         </nav>
     )
 }
