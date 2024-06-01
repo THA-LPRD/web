@@ -1,13 +1,18 @@
-"use server";
-
+import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from "next/cache";
 import { prisma } from '@/lib/prisma';
 import fs from "node:fs/promises";
 
-import { revalidatePath } from "next/cache";
-import { redirect } from 'next/navigation';
+export async function GET(request: Request) {
+    // Get all Assets
+    const allAssets = await prisma.asset.findMany();
 
+    return NextResponse.json(allAssets);
+}
 
-export async function uploadFile(formData: FormData) {
+export async function PUT(request: Request) {
+    // Create new Asset
+    const formData = await request.formData();
 
     const friendly_name_input = formData.get('friendly_name')! as string;
 
@@ -25,7 +30,6 @@ export async function uploadFile(formData: FormData) {
     
     await fs.writeFile('./public' + filePath, buffer);
     
-
     await prisma.asset.update({
         where: {
             id: newAsset.id,
@@ -35,6 +39,7 @@ export async function uploadFile(formData: FormData) {
         },
     });
 
-  revalidatePath("/assets");
-  redirect('/assets');
+    revalidatePath("/assets");
+
+    return Response.json({newAsset})
 }

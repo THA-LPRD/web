@@ -1,6 +1,7 @@
-import { prisma } from '@/lib/prisma';
-
 import Image from 'next/image';
+import Link from 'next/link'
+
+import { prisma } from '@/lib/prisma';
 
 export  default async function showAllAssets() {
     const allAssets = await prisma.asset.findMany();
@@ -9,14 +10,17 @@ export  default async function showAllAssets() {
         <div>
             <h1>
                 { allAssets.map((asset) => {
-                    return (<div>
+                    return (
+                    <div>
+                        <Link href={"/assets/" + asset.id}>
                         <Image
                             src={asset.file_path} // Route of the image file
                             width={216}
                             height={30}
-                            //alt="NextSpace Logo"
+                            alt={asset.friendly_name}
                         />
                         {asset.friendly_name}
+                        </Link>
                     </div>);
                 })}
             </h1>
