@@ -33,6 +33,12 @@ export  default async function showDisplayDetails({params}: Props) {
             <h2>
                 {display!.friendly_name}
             </h2>
+            Width:
+            {display!.width}
+            Height:
+            {display!.height}
+            Colordepth:
+            {display!.colordepth}
         </div>
     );
 }

@@ -2,15 +2,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from "next/cache";
 import { prisma } from '@/lib/prisma';
 
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest) {
     // Create new Display
     const url = new URL(request.url);
     const mac_adr = url.pathname.split("/").slice(-1)[0];
 
+    const data = await request.json();
+
     const newDisplay = await prisma.display.create({
         data: {
             mac_adr: mac_adr,
-            friendly_name: "",
+            friendly_name: data['friendly_name'],
+            width: data['width'],
+            height: data['height'],
+            colordepth: data['colordepth'],
+            colors: data['colors'],
         }
     });
 
