@@ -23,21 +23,34 @@ export async function PUT(request: Request) {
         },
     });
 
-    const file = formData.get("file") as File;
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = new Uint8Array(arrayBuffer);
-    const filePath = '/uploads/' + newAsset.id + '.' + file.name.split('.').slice(-1)[0];
-    
-    await fs.writeFile('./public' + filePath, buffer);
-    
-    await prisma.asset.update({
-        where: {
-            id: newAsset.id,
-        },
-        data: {
-            file_path: filePath,
-        },
-    });
+    if (formData.get('html')) {
+        await prisma.asset.update({
+            where: {
+                id: newAsset.id,
+            },
+            data: {
+                html: formData.get("html") as string,
+            },
+        });
+    }
+
+    if (formData.get('file')) {
+        const file = formData.get("file") as File;
+        const arrayBuffer = await file.arrayBuffer();
+        const buffer = new Uint8Array(arrayBuffer);
+        const filePath = '/uploads/' + newAsset.id + '.' + file.name.split('.').slice(-1)[0];
+        
+        await fs.writeFile('./public' + filePath, buffer);
+        
+        await prisma.asset.update({
+            where: {
+                id: newAsset.id,
+            },
+            data: {
+                file_path: filePath,
+            },
+        });
+    }
 
     revalidatePath("/assets");
 

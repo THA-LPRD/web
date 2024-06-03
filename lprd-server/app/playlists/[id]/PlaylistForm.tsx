@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'
 
-export function AssetForm({ asset }: any) {
+export function PlaylistForm({ playlist }: any) {
     const router = useRouter();
 
     const updateAsset = async (e : React.FormEvent<HTMLFormElement>) => {
@@ -48,16 +48,8 @@ export function AssetForm({ asset }: any) {
 
     return (
         <div>
-
-            <Image
-                src={asset?.file_path} // Route of the image file
-                width={216}
-                height={30}
-                alt={asset?.friendly_name}
-            />
             <form onSubmit={updateAsset}>
-                <input type="text" name="friendly_name" defaultValue={asset?.friendly_name ?? ''} />
-                <textarea name="html" rows={20} cols={97} /*onInput={}*/ defaultValue={asset?.html ?? ''} />
+                <input type="text" name="friendly_name" defaultValue={playlist?.friendly_name ?? ''} />
                 <button type="submit">Speichern</button>
             </form>
 

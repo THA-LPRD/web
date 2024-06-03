@@ -1,19 +1,39 @@
-import { redirect } from 'next/navigation'
-import { prisma } from '@/lib/prisma';
-import { AssetForm } from './AssetForm';
+'use client';
 
-interface Props {
-    params: {id: string};
-}
+import { useRouter } from 'next/navigation'
 
-export  default async function showAssetDetails({params}: Props) {
-    const asset = await prisma.asset.findUnique({where: {id: params.id}});
+export  default async function showAssetDetails() {
+    const router = useRouter();
+    
+    const createAsset = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
-    if (!asset) {
-        redirect("/assets");
-    }
+        const formData = new FormData(e.currentTarget);
+
+        const response = await fetch('/api/v1/assets', {
+            method: 'PUT',
+            body: formData, //JSON.stringify(body),
+        });
+
+        if (response.ok) {
+            // redirect('/assets');
+            // Redirect geht noch nicht
+            router.push("/assets");
+        } else {
+            console.error('Failed to create the asset');
+        }
+    };
 
     return (
-        <AssetForm asset={asset}/>
+        <div>
+            <h2>Create new Asset</h2>
+            <form onSubmit={createAsset}>
+                <label htmlFor="friendly_name">Assetname</label>
+                <input type="text" name="friendly_name" />
+                <label htmlFor="html">HTML</label>
+                <textarea rows={20} cols={97} name="html" /*onInput={}*/ />
+                <button type="submit">Save</button>
+            </form>
+        </div>
     );
 }

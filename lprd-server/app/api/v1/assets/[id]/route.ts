@@ -25,14 +25,15 @@ export async function PUT(request: Request) {
     const formData = await request.formData();
     
 
-    const friendly_name_input = formData.get('friendly_name')! as string;
+    // const friendly_name_input = formData.get('friendly_name')! as string;
 
     const updatedAsset = await prisma.asset.update({
         where: {
             id: id,
         },
         data: {
-            friendly_name: friendly_name_input,
+            friendly_name: formData.get('friendly_name')! as string,
+            html: formData.get('html')! as string,
         },
     });
 
