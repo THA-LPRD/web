@@ -17,9 +17,29 @@ export async function GET(request: Request) {
     return NextResponse.json(oneAsset);
 }
 
-export async function UPDATE(req: NextRequest) {
+export async function PUT(request: Request) {
     // Update a specific Asset
+    const url = new URL(request.url);
+    const id = url.pathname.split("/").slice(-1)[0];
+
+    const formData = await request.formData();
+    
+
+    const friendly_name_input = formData.get('friendly_name')! as string;
+
+    const updatedAsset = await prisma.asset.update({
+        where: {
+            id: id,
+        },
+        data: {
+            friendly_name: friendly_name_input,
+        },
+    });
+
     revalidatePath("/assets");
+
+    //return Response.json({updatedAsset})
+    return NextResponse.json({ message: 'Updated Asset', id: id, name: friendly_name_input }, { status: 200 });
 }
 
 export async function DELETE(request: Request) {

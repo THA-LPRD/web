@@ -14,15 +14,20 @@ datasource db {
 }
 
 model Display {
-  id              Int     @id @default(autoincrement())
-  mac_adr         String  @unique
+  mac_adr         String  @id @unique
   friendly_name   String?
+  width           Int
+  height          Int
+  colordepth      Int
+  colors          String[] // Saved in HEX-Format
+  last_seen       DateTime?
 }
 
 model Asset {
   id              String  @id @default(cuid())
   friendly_name   String?
   file_path       String?
+  html            String?
 }
 
 model Playlist {
@@ -30,4 +35,5 @@ model Playlist {
   friendly_name   String?
   json            Json?
 }
+
 

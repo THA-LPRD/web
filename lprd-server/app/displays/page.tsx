@@ -1,6 +1,10 @@
+export const dynamic = 'force-dynamic';
+
+import Link from 'next/link'
+
 import { prisma } from '@/lib/prisma';
 
-export  default async function showAllDisplays() {
+export default async function showAllDisplays() {
     /*
     const displays: Display[] = await fetch('http://localhost:3000/api/getDisplays').then(
         (res) => res.json()
@@ -14,13 +18,15 @@ export  default async function showAllDisplays() {
 
     return (
         <div>
-            <h1>
+            <h2>Alle Displays</h2>
                 { allDisplays.map((display) => {
                     return (<div>
-                        {display.friendly_name}
+                        <Link href={"/displays/" + display.mac_adr}>
+                            {display.friendly_name}
+                        </Link>
                     </div>);
                 })}
-            </h1>
+            
         </div>
     );
 }

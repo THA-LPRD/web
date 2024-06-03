@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Image from 'next/image';
 import Link from 'next/link'
 
@@ -8,7 +10,17 @@ export  default async function showAllAssets() {
 
     return (
         <div>
-            <h1>
+            <nav>
+                <ul>
+                    <li>
+                        <Link href={'/assets/create'}>Create</Link>
+                    </li>
+                    <li>
+                        <Link href={'/assets/upload'}>Upload</Link>
+                    </li>
+                </ul>
+            </nav>
+            <h2>Alle Assets</h2>
                 { allAssets.map((asset) => {
                     return (
                     <div>
@@ -23,7 +35,6 @@ export  default async function showAllAssets() {
                         </Link>
                     </div>);
                 })}
-            </h1>
         </div>
     );
 }

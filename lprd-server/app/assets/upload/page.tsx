@@ -14,7 +14,7 @@ export default function AssetForm({ user }: any) {
 
         const formData = new FormData(e.currentTarget);
 
-        const response = await fetch('/api/assets', {
+        const response = await fetch('/api/v1/assets', {
             method: 'PUT',
             body: formData, //JSON.stringify(body),
         });
@@ -30,7 +30,7 @@ export default function AssetForm({ user }: any) {
 
     return (
         <div>
-            <h2>Create new Asset</h2>
+            <h2>Upload new Asset</h2>
             <form onSubmit={createAsset}>
                 <label htmlFor="friendly_name">Assetname</label>
                 <input type="text" name="friendly_name" />

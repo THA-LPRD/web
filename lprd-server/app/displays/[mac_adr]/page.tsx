@@ -1,6 +1,8 @@
 // Cache expiery after 300 Seconds
 // export const revalidate = 300;
 
+export const dynamic = 'force-dynamic';
+
 import { prisma } from '@/lib/prisma';
 
 /*
@@ -28,9 +30,9 @@ export  default async function showDisplayDetails({params}: Props) {
 
     return (
         <div>
-            <h1>
-                {display.friendly_name}
-            </h1>
+            <h2>
+                {display!.friendly_name}
+            </h2>
         </div>
     );
 }

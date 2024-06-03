@@ -15,6 +15,9 @@ export default function NavMenu() {
                 <li>
                     <Link href={'/assets'}>Assets</Link>
                 </li>
+                <li>
+                    <Link href={'/playlists'}>Playlists</Link>
+                </li>
             </ul>
             <ChangeButtons/>
         </nav>
