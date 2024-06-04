@@ -21,6 +21,7 @@ model Display {
   colordepth      Int
   colors          String[] // Saved in HEX-Format
   last_seen       DateTime?
+  currentAsset    String?
 }
 
 model Asset {

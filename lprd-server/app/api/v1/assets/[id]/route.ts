@@ -40,7 +40,7 @@ export async function PUT(request: Request) {
     revalidatePath("/assets");
 
     //return Response.json({updatedAsset})
-    return NextResponse.json({ message: 'Updated Asset', id: id, name: friendly_name_input }, { status: 200 });
+    return NextResponse.json({ message: 'Updated Asset'}, { status: 200 });
 }
 
 export async function DELETE(request: Request) {
