@@ -2,9 +2,23 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'
+import React, { useState } from 'react';
+
 
 export function AssetForm({ asset }: any) {
     const router = useRouter();
+
+    const [formData, setFormData] = useState({
+        html: '',
+      });
+    
+      const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+          ...formData,
+          [name]: value
+        });
+      };
 
     const updateAsset = async (e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -48,16 +62,16 @@ export function AssetForm({ asset }: any) {
 
     return (
         <div>
-
             <Image
                 src={asset?.file_path} // Route of the image file
                 width={216}
                 height={30}
                 alt={asset?.friendly_name}
             />
+            <div style={{width: '800px', height: '480px;'}} dangerouslySetInnerHTML={{__html: formData.html}}/>
             <form onSubmit={updateAsset}>
                 <input type="text" name="friendly_name" defaultValue={asset?.friendly_name ?? ''} />
-                <textarea name="html" rows={20} cols={97} /*onInput={}*/ defaultValue={asset?.html ?? ''} />
+                <textarea name="html" rows={20} cols={97} onInput={handleChange} defaultValue={asset?.html ?? ''} />
                 <button type="submit">Speichern</button>
             </form>
 

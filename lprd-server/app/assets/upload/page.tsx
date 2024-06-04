@@ -35,7 +35,7 @@ export default function AssetForm({ user }: any) {
                 <label htmlFor="friendly_name">Assetname</label>
                 <input type="text" name="friendly_name" />
                 <label htmlFor="file">Datei</label>
-                <input type="file" name="file" />
+                <input type="file" name="file" accept='.png'/>
                 <button type="submit">Save</button>
             </form>
         </div>
