@@ -15,8 +15,7 @@ export async function PUT(request: NextRequest) {
             friendly_name: data['friendly_name'],
             width: data['width'],
             height: data['height'],
-            colordepth: data['colordepth'],
-            colors: data['colors'],
+            last_seen: new Date(),
         }
     });
 

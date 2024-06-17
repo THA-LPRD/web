@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from "next/cache";
 import { prisma } from '@/lib/prisma';
-import { Varela } from 'next/font/google';
 
 export async function GET(request: Request) {
     // Get one specific Display
@@ -14,7 +13,11 @@ export async function GET(request: Request) {
         }
     });
 
-    return NextResponse.json(oneDisplay);
+    if (oneDisplay) {
+        return NextResponse.json(oneDisplay);
+    } else {
+        return NextResponse.json({ message: 'No Display found' }, { status: 404 });
+    }
 }
 
 export async function PUT(request: Request) {
@@ -42,7 +45,6 @@ export async function PUT(request: Request) {
                 friendly_name: formData.get('friendly_name')! as string,
                 width: parseInt(formData.get('width')!.toString()),
                 height: parseInt(formData.get('height')!.toString()),
-                colordepth: parseInt(formData.get('colordepth')!.toString()),
             },
         });
     }
@@ -56,7 +58,6 @@ export async function PUT(request: Request) {
             console.log((e as Error).message)
         }
 
-        
         if (data["currentAsset"]) {
             const updatedDisplay = await prisma.display.update({
                 where: {
@@ -64,6 +65,7 @@ export async function PUT(request: Request) {
                 },
                 data: {
                     currentAsset: data["currentAsset"],
+                    currentAssetType: data["currentAssetType"],
                 },
             });
         }

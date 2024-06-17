@@ -70,8 +70,12 @@ export function AssetForm({ asset }: any) {
             />
             <div style={{width: '800px', height: '480px;'}} dangerouslySetInnerHTML={{__html: formData.html}}/>
             <form onSubmit={updateAsset}>
-                <input type="text" name="friendly_name" defaultValue={asset?.friendly_name ?? ''} />
-                <textarea name="html" rows={20} cols={97} onInput={handleChange} defaultValue={asset?.html ?? ''} />
+                <label htmlFor="friendly_name">Assetname</label>
+                <input type="text" name="friendly_name" id="friendly_name" defaultValue={asset?.friendly_name ?? ''} />
+                <label htmlFor="valid_for">Anzeigedauer</label>
+                <input type="text" name="valid_for" id="valid_for" defaultValue='600'/>
+                <label htmlFor="html">HTML</label>
+                <textarea name="html" id="html" rows={20} cols={97} onInput={handleChange} defaultValue={asset?.html ?? ''} />
                 <button type="submit">Speichern</button>
             </form>
 

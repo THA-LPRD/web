@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import Image from 'next/image';
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 
 import { DisplayForm } from './DisplayForm';
 
@@ -20,23 +21,6 @@ export  default async function showDisplayDetails({params}: Props) {
     if (!display) {
         redirect("/displays");
     }
-
-    const setAsset = async (id) => {
-        // const response = await fetch("/api/v1/displays/" + display?.mac_adr, {
-        //     method: 'PUT',
-        //     body: {"currentAsset": id},
-        // });
-        // router.push("/displays");
-        console.log(id);
-        //if (response.ok) {
-            // redirect('/assets');
-            // Redirect geht noch nicht
-            // router.push("/assets");
-        //} else {
-            //console.log(response.body);
-            //console.error('Failed to update the asset');
-        //}
-    };
 
     return (
         <DisplayForm display={display} allAssets={allAssets}></DisplayForm>

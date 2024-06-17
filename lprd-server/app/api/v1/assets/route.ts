@@ -20,6 +20,7 @@ export async function PUT(request: Request) {
         data: {
             friendly_name: friendly_name_input,
             file_path: '',
+            valid_for: parseInt(formData.get('valid_for') as string),
         },
     });
 

@@ -30,6 +30,8 @@ export  default async function showAssetDetails() {
             <form onSubmit={createAsset}>
                 <label htmlFor="friendly_name">Assetname</label>
                 <input type="text" name="friendly_name" />
+                <label htmlFor="valid_for">Anzeigedauer:</label>
+                <input type="text" name="valid_for" id="valid_for" defaultValue='600'/>
                 <label htmlFor="html">HTML</label>
                 <textarea rows={20} cols={97} name="html" /*onInput={}*/ />
                 <button type="submit">Save</button>

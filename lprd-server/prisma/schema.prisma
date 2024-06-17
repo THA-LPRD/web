@@ -14,27 +14,27 @@ datasource db {
 }
 
 model Display {
-  mac_adr         String  @id @unique
-  friendly_name   String?
-  width           Int
-  height          Int
-  colordepth      Int
-  colors          String[] // Saved in HEX-Format
-  last_seen       DateTime?
-  currentAsset    String?
+  mac_adr          String  @id @unique
+  friendly_name    String?
+  width            Int
+  height           Int
+  last_seen        DateTime?
+  currentAsset     String?
+  currentAssetType String?
 }
 
 model Asset {
-  id              String  @id @default(cuid())
-  friendly_name   String?
-  file_path       String?
-  html            String?
+  id               String  @id @default(cuid())
+  friendly_name    String?
+  file_path        String?
+  html             String?
+  valid_for        Int?
 }
 
 model Playlist {
-  id              String     @id @default(cuid())
-  friendly_name   String?
-  json            Json?
+  id               String     @id @default(cuid())
+  friendly_name    String?
+  json             Json?
 }
 
 
