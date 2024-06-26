@@ -25,16 +25,15 @@ model Display {
 
 model Asset {
   id               String  @id @default(cuid())
+  type             Type?
   friendly_name    String?
   file_path        String?
   html             String?
   valid_for        Int?
 }
 
-model Playlist {
-  id               String     @id @default(cuid())
-  friendly_name    String?
-  json             Json?
+enum Type {
+  STATIC
+  DYNAMIC
 }
-
 
