@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from "next/cache";
 import { prisma } from '@/lib/prisma';
 import fs from "node:fs/promises";
+import nodeHtmlToImage from 'node-html-to-image'
+
 
 export async function GET(request: Request) {
     // Get all Assets
@@ -21,6 +23,7 @@ export async function PUT(request: Request) {
             friendly_name: friendly_name_input,
             file_path: '',
             valid_for: parseInt(formData.get('valid_for') as string),
+            type: "STATIC"
         },
     });
 
@@ -31,7 +34,13 @@ export async function PUT(request: Request) {
             },
             data: {
                 html: formData.get("html") as string,
+                file_path: "/uploads/" + newAsset.id + ".png",
             },
+        });
+
+        await nodeHtmlToImage({
+            output: "./public/uploads/" + newAsset.id + ".png",
+            html: formData.get("html") as string,
         });
     }
 
@@ -49,6 +58,7 @@ export async function PUT(request: Request) {
             },
             data: {
                 file_path: filePath,
+                type: "STATIC",
             },
         });
     }

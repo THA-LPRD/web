@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from "next/cache";
 import { prisma } from '@/lib/prisma';
 import fs from "node:fs/promises";
+import nodeHtmlToImage from 'node-html-to-image'
 
 export async function GET(request: Request) {
     // Get one specific Asset
@@ -38,6 +39,11 @@ export async function PUT(request: Request) {
         },
     });
 
+    await nodeHtmlToImage({
+        output: "./public/uploads/" + updatedAsset.id + ".png",
+        html: updatedAsset.html as string,
+    });
+
     revalidatePath("/assets");
 
     //return Response.json({updatedAsset})
@@ -55,7 +61,11 @@ export async function DELETE(request: Request) {
         }
     });
 
-    await fs.rm('./public' + oneAsset?.file_path);
+    try {
+        await fs.rm('./public' + oneAsset?.file_path);
+    } catch (error) {
+        console.error('Failed to remove file');
+    }
     
     await prisma.asset.delete({
         where: {
