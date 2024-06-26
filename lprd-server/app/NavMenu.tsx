@@ -15,7 +15,6 @@ export default function NavMenu() {
                 <li>
                     <Link href={'/assets'}>Assets</Link>
                 </li>
-
             </ul>
         </nav>
     )

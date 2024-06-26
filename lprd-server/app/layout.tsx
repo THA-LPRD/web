@@ -1,9 +1,25 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import "./global.css";
 import NavMenu from "./NavMenu";
+import Image from 'next/image';
 
 const inter = Inter({ subsets: ["latin"] });
+const TWKEverett = localFont({
+src: [
+  {
+  path: "../components/fonts/TWKEverett-Bold-web.ttf",
+  style: "Bold",
+  },
+  {
+    path: "../components/fonts/TWKEverett-Medium-web.ttf",
+    style: "Medium",
+  },
+]
+});
+  
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,9 +33,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={TWKEverett.className}>
+      <header>
+          <Image
+            src="/LPRD-Logo.webp"
+            width={96}
+            height={96}
+            alt="Logo"
+          />
+        <h1 className={TWKEverett.className}>Low-Power-Raumanzeige</h1>
+      </header>
         <NavMenu/>
-        {children}
+        <div className={"main-content-container"}>
+          {children}
+          </div>
       </body>
     </html>
   );

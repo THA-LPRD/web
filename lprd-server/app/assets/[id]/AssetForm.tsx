@@ -62,20 +62,29 @@ export function AssetForm({ asset }: any) {
 
     return (
         <div>
+            <h2>{asset.friendly_name}</h2>
+            <h3>Vorschau</h3>
             <Image
                 src={asset?.file_path} // Route of the image file
-                width={216}
-                height={30}
+                width={400}
+                height={240}
                 alt={asset?.friendly_name}
             />
-            <div style={{width: '800px', height: '480px;'}} dangerouslySetInnerHTML={{__html: formData.html}}/>
+            <h3>Details</h3>
             <form onSubmit={updateAsset}>
                 <label htmlFor="friendly_name">Assetname</label>
                 <input type="text" name="friendly_name" id="friendly_name" defaultValue={asset?.friendly_name ?? ''} />
+                <br />
                 <label htmlFor="valid_for">Anzeigedauer</label>
-                <input type="text" name="valid_for" id="valid_for" defaultValue='600'/>
+                <input type="text" name="valid_for" id="valid_for" defaultValue={asset?.valid_for ?? '600'} />
+                <label htmlFor="valid_for">Sekunden</label>
+                <br />
                 <label htmlFor="html">HTML</label>
-                <textarea name="html" id="html" rows={20} cols={97} onInput={handleChange} defaultValue={asset?.html ?? ''} />
+                <br />
+                <textarea name="html" id="html" rows={20} cols={97} onInput={handleChange} onPaste={handleChange} defaultValue={asset?.html ?? ''} />
+                < br />
+                HTML Live Vorschau
+                <div style={{width: '800px', height: '480px;'}} dangerouslySetInnerHTML={{__html: formData.html}}/>
                 <button type="submit">Speichern</button>
             </form>
 

@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic';
 
+import Image from 'next/image';
 import Link from 'next/link'
 
 import { prisma } from '@/lib/prisma';
@@ -19,14 +20,29 @@ export default async function showAllDisplays() {
     return (
         <div>
             <h2>Alle Displays</h2>
-                { allDisplays.map((display) => {
-                    return (<div>
+            <div className='allDisplay-container'>
+                {allDisplays.map(async (display) => {
+                    const asset = await prisma.asset.findUnique({
+                        where: {
+                            id: display.currentAsset!,
+                        },
+                    });
+                    return (
                         <Link href={"/displays/" + display.mac_adr}>
-                            {display.friendly_name}
+                            <div className='display-container'>
+                            <Image
+                                    src={asset?.file_path!} // Route of the image file
+                                    width={216}
+                                    height={30}
+                                    alt={asset?.friendly_name!}
+                                />
+                                {display.friendly_name}
+                                </div>
                         </Link>
-                    </div>);
+                        
+                    );
                 })}
-            
+            </div>
         </div>
     );
 }

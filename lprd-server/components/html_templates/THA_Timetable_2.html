@@ -75,7 +75,7 @@
 
     .title {
         padding-left: 0%;
-        font-size: xx-large;
+        font-size: 25px;
     }
 
     .timeslot {
@@ -136,17 +136,17 @@
         <div class="body-item" id="now">
             <div class="body-item-container-left">
                 <div class="timeslot">
-                    09:50</br>11:20</div>
+                    {{event1_time_start}}</br>{{event1_time_end}}</div>
             </div>
             <div class="body-item-container-line" id="nowline"></div>
             <div class="body-item-container-right">
                 <div class="body-list">
                     <div class="">Läuft jetzt</div>
                     <div class="title">
-                        Entwicklung eines Tools zur Bestandsführung
+                        {{event1_title}}
                     </div>
                     <div class="teacher">
-                        Prof. Dr. Gundolf Kiefer
+                        {{event1_description}}
                     </div>
                 </div>
             </div>
@@ -154,7 +154,7 @@
         <div class="body-item">
             <div class="body-item-container-left">
                 <div class="timeslot">
-                    09:50</br>11:20
+                    {{event2_time_start}}</br>{{event2_time_end}}
                 </div>
             </div>
             <div class="body-item-container-line"></div>
@@ -162,10 +162,10 @@
                 <div class="body-list">
                     <div class="">Anschließend</div>
                     <div class="title">
-                        StudySphere
+                        {{event2_title}}
                     </div>
                     <div class="teacher">
-                        Prof. Dr. Gundolf Kiefer
+                        {{event2_description}}
                     </div>
                 </div>
             </div>
@@ -173,7 +173,7 @@
         <div class="body-item">
             <div class="body-item-container-left">
                 <div class="timeslot">
-                    09:50</br>11:20
+                    {{event3_time_start}}</br>{{event3_time_end}}
                 </div>
             </div>
             <div class="body-item-container-line"></div>
@@ -181,10 +181,10 @@
                 <div class="body-list">
                     <div class="">Danach</div>
                     <div class="title">
-                        Entwurf digitaler Systeme
+                        {{event3_title}}
                     </div>
                     <div class="teacher">
-                        Prof. Dr. Gundolf Kiefer
+                        {{event1_description}}
                     </div>
                 </div>
             </div>
