@@ -14,17 +14,17 @@ export default async function showAllAssets() {
             <nav>
                 <ul>
                     <li>
-                        <Link className='asset-buttons' href={'/assets/create'}>Create</Link>
+                        <Link className='asset-buttons' href={'/assets/create'}>Erstellen aus HTML</Link>
                     </li>
                     <li>
-                        <Link className='asset-buttons' href={'/assets/upload'}>Upload</Link>
+                        <Link className='asset-buttons' href={'/assets/upload'}>Hochladen</Link>
                     </li>
                 </ul>
             </nav>
             <div className='allAssets-container'>
                 {allAssets.map((asset) => {
                     return (
-                        <div className='asset-container'>
+                        <div key={asset.id} className='asset-container'>
                             <Link href={"/assets/" + asset.id}>
                                 <Image
                                     src={asset!.file_path!} // Route of the image file

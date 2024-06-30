@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link'
 
 import { prisma } from '@/lib/prisma';
+import { env } from 'node:process';
 
 export default async function showAllDisplays() {
     /*
@@ -22,25 +23,38 @@ export default async function showAllDisplays() {
             <h2>Alle Displays</h2>
             <div className='allDisplay-container'>
                 {allDisplays.map(async (display) => {
-                    const asset = await prisma.asset.findUnique({
-                        where: {
-                            id: display.currentAsset!,
-                        },
-                    });
-                    return (
-                        <Link href={"/displays/" + display.mac_adr}>
-                            <div className='display-container'>
-                            <Image
-                                    src={asset?.file_path!} // Route of the image file
-                                    width={216}
-                                    height={30}
-                                    alt={asset?.friendly_name!}
-                                />
-                                {display.friendly_name}
-                                </div>
-                        </Link>
-                        
-                    );
+                    let asset;
+                    if (display.currentAsset) {
+                        const asset = await prisma.asset.findUnique({
+                            where: {
+                                id: display.currentAsset!,
+                            },
+                        });
+                        return (
+                            <Link key={display.mac_adr} href={"/displays/" + display.mac_adr}>
+                                <div className='display-container'>
+                                        <Image
+                                            src={asset!.file_path!} // Route of the image file
+                                            width={216}
+                                            height={30}
+                                            alt={asset!.friendly_name!}
+                                        />
+                                    {display.friendly_name}
+                                    </div>
+                            </Link>
+                            
+                        );
+                    } else {
+                        return (
+                            <Link key={display.mac_adr} href={"/displays/" + display.mac_adr}>
+                                <div className='display-container'>
+                                    {display.friendly_name}
+                                    </div>
+                            </Link>
+                            
+                        );
+                    }
+                    
                 })}
             </div>
         </div>

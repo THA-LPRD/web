@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'
 
-import { ChangeButtons } from './ChangeButtons';
-
 import styles from './NavMenu.module.css';
 
 export default function NavMenu() {

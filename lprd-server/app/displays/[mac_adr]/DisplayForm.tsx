@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react';
-import { prisma, Type } from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 
 
 
@@ -45,7 +45,7 @@ export function DisplayForm({ display, allStaticAssets, allDynamicAssets }: { di
         }
     };
 
-    const setAsset = async (e) => {
+    const setAsset = async (e : any) => {
         const data = {
             "currentAsset": e.target.id,
             "currentAssetType": e.target.type,
@@ -101,7 +101,7 @@ export function DisplayForm({ display, allStaticAssets, allDynamicAssets }: { di
                 {allStaticAssets.map((asset) => {
                     return (
 
-                        <div className='asset-container' id={asset.id} onClick={setAsset} >
+                        <div key={asset.id} className='asset-container' id={asset.id} onClick={setAsset} >
                             <Image
                                 src={asset.file_path!} // Route of the image file
                                 width={160}
@@ -119,7 +119,7 @@ export function DisplayForm({ display, allStaticAssets, allDynamicAssets }: { di
             <div className='allAssets-container'>
                 {allDynamicAssets.map((asset) => {
                     return (
-                        <div className='asset-container' id={asset.id} onClick={setAsset} >
+                        <div key={asset.id} className='asset-container' id={asset.id} onClick={setAsset} >
                             <Image
                                 src={asset.file_path!} // Route of the image file
                                 width={160}

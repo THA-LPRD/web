@@ -38,7 +38,7 @@ export default function AssetForm({ user }: any) {
                 <input type="text" name="valid_for" id="valid_for" defaultValue='600'/>
                 <label htmlFor="file">Datei</label>
                 <input type="file" name="file" accept='.png'/>
-                <button type="submit">Save</button>
+                <button type="submit">Hochladen</button>
             </form>
         </div>
     );

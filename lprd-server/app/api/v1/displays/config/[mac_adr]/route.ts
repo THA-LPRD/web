@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from "next/cache";
 import { prisma } from '@/lib/prisma';
-import { Generate } from '../../../assets/generate/[type]/route';
 
 export async function GET(request: Request) {
     // Get one specific Display
@@ -34,7 +33,7 @@ export async function GET(request: Request) {
         }
         case 'dynamic': {
             // const response = await fetch("/api/v1/assets/generate/projectday");
-            const json = await Generate("projectday");
+            const json = await fetch("/api/v1/assets/generate/projectday");
             return NextResponse.json(json);
         }
         // default: {

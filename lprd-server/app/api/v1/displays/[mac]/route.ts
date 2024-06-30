@@ -42,9 +42,9 @@ export async function PUT(request: Request) {
                 mac_adr: mac_adr,
             },
             data: {
-                friendly_name: formData.get('friendly_name')! as string,
-                width: parseInt(formData.get('width')!.toString()),
-                height: parseInt(formData.get('height')!.toString()),
+                friendly_name: formData!.get('friendly_name')! as string,
+                width: parseInt(formData!.get('width')!.toString()),
+                height: parseInt(formData!.get('height')!.toString()),
             },
         });
     }

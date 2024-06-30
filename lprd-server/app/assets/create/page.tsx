@@ -1,9 +1,8 @@
 'use client';
 
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 
 export  default async function showAssetDetails() {
-    const router = useRouter();
     
     const createAsset = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -18,7 +17,7 @@ export  default async function showAssetDetails() {
         if (response.ok) {
             // redirect('/assets');
             // Redirect geht noch nicht
-            router.push("/assets");
+            // router.push("/assets");
         } else {
             console.error('Failed to create the asset');
         }
@@ -34,7 +33,7 @@ export  default async function showAssetDetails() {
                 <input type="text" name="valid_for" id="valid_for" defaultValue='600'/>
                 <label htmlFor="html">HTML</label>
                 <textarea rows={20} cols={97} name="html" /*onInput={}*/ />
-                <button type="submit">Save</button>
+                <button type="submit">Generieren</button>
             </form>
         </div>
     );
