@@ -1,0 +1,42 @@
+.nav {
+    display: flex;
+    background-color: #FF0350;
+    color: #fff;
+    height: 70px;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 940px;
+    margin: auto;
+}
+
+.logo {
+
+}
+
+.links {
+    list-style: none;
+    display: flex;
+    margin-right: 1rem;
+}
+
+.links ul {
+    list-style: none;
+    margin: 0;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    background-color: #fff;
+    border-top: 3px solid #333;
+}
+
+.links li {
+    margin: 0 15px;
+    /* height: 70px;
+    display: flex;
+    align-items: center;
+    padding: 0.25rem; */
+}
+
+.links a {
+    color: #fff;
+}
