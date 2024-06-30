@@ -1,5 +1,6 @@
 // Cache expiery after 300 Seconds
 // export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma';
