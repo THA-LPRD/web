@@ -24,17 +24,69 @@ model Display {
   currentAssetType String?
 }
 
-model Asset {
+model Template {
   id               String  @id @default(cuid())
-  type             Type?
   friendly_name    String?
-  file_path        String?
-  html             String?
-  valid_for        Int?
+  html             String
+  using_assets     Asset[]
 }
 
+model Asset {
+// Bleibt
+  id               String  @id @default(cuid())
+  friendly_name    String?
+  file_path        String?
+
+// Fällt raus
+  type             Type?  
+  html             String?
+  valid_for        Int?
+
+// Kommt neu
+  template         Template @relation(fields: [template_id], references: [id])
+  template_id      String
+  datas            DatasOnAssets[]
+}
+
+model Data {
+  id               String  @id @default(cuid())
+  json             Json
+  origin_type      Data_origin_type
+  outdated_at      DateTime?
+  assets           DatasOnAssets[]
+}
+
+model DatasOnAssets {
+  asset      Asset @relation(fields: [assetId], references: [id])
+  assetId    String 
+  data       Data @relation(fields: [dataId], references: [id])
+  dataId     String
+
+  @@id([assetId, dataId])
+}
+
+// Fällt raus
 enum Type {
   STATIC
   DYNAMIC
 }
 
+// Kommt neu
+enum Data_origin_type {
+  TXT
+  CSV
+  JSON
+}
+
+
+// Untis Worker
+
+model UntisRooms {
+  id                Int @id @unique
+  active            Boolean?
+  alternateName     String?
+  backColor         String?
+  foreColor         String?
+  longName          String?
+  name              String?
+}
