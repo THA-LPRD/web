@@ -11,7 +11,7 @@ export default function NavMenu() {
                     <Link href={'/displays'}>Displays</Link>
                 </li>
                 <li>
-                    <Link href={'/assets'}>Assets</Link>
+                    <Link href={'/assets'}>Staatische Assets</Link>
                 </li>
             </ul>
         </nav>

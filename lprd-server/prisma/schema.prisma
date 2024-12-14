@@ -40,7 +40,7 @@ model Asset {
 // Fällt raus
   type             Type?  
   html             String?
-  valid_for        Int?
+  valid_until      DateTime
 
 // Kommt neu
   template         Template @relation(fields: [template_id], references: [id])
