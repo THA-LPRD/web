@@ -31,7 +31,7 @@ export  default async function showAssetDetails() {
                 <label htmlFor="friendly_name">Assetname</label>
                 <input type="text" name="friendly_name" />
                 <label htmlFor="valid_for">Anzeigedauer:</label>
-                <input type="text" name="valid_for" id="valid_for" defaultValue='600'/>
+                <input type="text" name="valid_for" id="valid_for" defaultValue={new Date().toDateString()}/>
                 <label htmlFor="html">HTML</label>
                 <textarea rows={20} cols={97} name="html" /*onInput={}*/ />
                 <button type="submit">Generieren</button>

@@ -43,8 +43,8 @@ model Asset {
   valid_until      DateTime
 
 // Kommt neu
-  template         Template @relation(fields: [template_id], references: [id])
-  template_id      String
+  template         Template? @relation(fields: [template_id], references: [id])
+  template_id      String?
   datas            DatasOnAssets[]
 }
 
@@ -52,6 +52,7 @@ model Data {
   id               String  @id @default(cuid())
   json             Json
   origin_type      Data_origin_type
+  origin_worker    String?
   outdated_at      DateTime?
   assets           DatasOnAssets[]
 }

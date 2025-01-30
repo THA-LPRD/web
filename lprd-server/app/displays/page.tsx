@@ -25,7 +25,7 @@ export default async function showAllDisplays() {
             <h2>Alle Displays</h2>
             <div className='allDisplay-container'>
                 {allDisplays.map(async (oneDisplay) => {
-                    return(<DisplayComponent {...oneDisplay}/>)
+                    return(<DisplayComponent key={oneDisplay.mac_adr} {...oneDisplay}/>)
                 })}
             </div>
         </div>

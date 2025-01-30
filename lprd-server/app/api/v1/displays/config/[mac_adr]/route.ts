@@ -30,7 +30,7 @@ export async function GET(request: Request) {
                     id: oneDisplay?.currentAsset!,
                 }
             });
-            return NextResponse.json({ file_path: currentAsset?.file_path, valid_for: currentAsset?.valid_for });
+            return NextResponse.json({ file_path: currentAsset?.file_path, valid_for: currentAsset?.valid_until });
         }
         case 'dynamic': {
             // const response = await fetch("/api/v1/assets/generate/projectday");

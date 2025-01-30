@@ -36,7 +36,7 @@ export async function PUT(request: Request) {
         data: {
             friendly_name: formData.get('friendly_name')! as string,
             html: formData.get('html')! as string,
-            valid_for: parseInt(formData.get('valid_for')! as string),
+            // valid_for: parseInt(formData.get('valid_for')! as string),
         },
     });
 

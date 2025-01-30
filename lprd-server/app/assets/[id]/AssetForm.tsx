@@ -76,9 +76,9 @@ export function AssetForm({ asset }: any) {
                 <label htmlFor="friendly_name">Assetname</label>
                 <input type="text" name="friendly_name" id="friendly_name" defaultValue={asset?.friendly_name ?? ''} />
                 <br />
-                <label htmlFor="valid_for">Anzeigedauer</label>
+                {/*<label htmlFor="valid_for">Anzeigedauer</label>
                 <input type="text" name="valid_for" id="valid_for" defaultValue={asset?.valid_for ?? '600'} />
-                <label htmlFor="valid_for">Sekunden</label>
+                <label htmlFor="valid_for">Sekunden</label>*/}
                 <br />
                 <label htmlFor="html">HTML</label>
                 <br />

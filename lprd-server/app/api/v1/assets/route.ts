@@ -19,12 +19,13 @@ export async function PUT(request: Request) {
     const formData = await request.formData();
 
     const friendly_name_input = formData.get('friendly_name')! as string;
+    const date = new Date(formData.get('valid_for') as string);
 
     const newAsset = await prisma.asset.create({
         data: {
             friendly_name: friendly_name_input,
             file_path: '',
-            valid_for: parseInt(formData.get('valid_for') as string),
+            valid_until: date,
             type: "STATIC"
         },
     });

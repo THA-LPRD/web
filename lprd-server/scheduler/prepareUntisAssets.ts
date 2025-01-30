@@ -14,8 +14,8 @@ interface AssetGenerationResult {
 
 export class AssetGenerator {
     private calculateValidUntil(lessonData): Date {
-        const now = new Date('2024-12-10T10:00:00');
-        const tomorrow = new Date('2024-12-10T10:00:00');
+        const now = new Date('2024-12-19T10:00:00');
+        const tomorrow = new Date('2024-12-19T10:00:00');
         tomorrow.setDate(tomorrow.getDate() + 1);
         tomorrow.setHours(1, 0, 0);  // 01:00 Uhr am Folgetag
 
@@ -62,6 +62,13 @@ export class AssetGenerator {
                 where: {
                     valid_until: {
                         lte: new Date(Date.now() + 10 * 60 * 1000) // Current time + 10 minutes
+                    },
+                    datas: {
+                        some: {
+                            data: {
+                                origin_worker: "WebUntis"
+                            }
+                        }
                     }
                 },
                 include: {
@@ -103,6 +110,12 @@ export class AssetGenerator {
                 `${asset.id}_${Date.now()}.png`
             );
 
+            const absoluteOutputPath = path.join(
+                '../public',
+                'dynamic',
+                `${asset.id}_${Date.now()}.png`
+            );
+
 
             // Ensure directory exists
             await fs.mkdir(path.dirname(outputPath), { recursive: true });
@@ -136,7 +149,7 @@ export class AssetGenerator {
                             return null;
                         }
 
-                        const now = new Date('2024-12-10T10:00:00');
+                        const now = new Date('2024-12-19T10:40:00');
                         const today = now.getFullYear() * 10000 +
                             (now.getMonth() + 1) * 100 +
                             now.getDate();
