@@ -50,25 +50,43 @@ export async function PUT(request: Request) {
         },
     });
 
-    try {
-      // Pfad zum C-Programm (relativ zum Projektroot)
-      const programPath = path.join('npx');
+    try {      
+      // Starte den npx-Prozess
+      const process = spawn('npx', ['tsx', 'scheduler/preparePresenceAssets.ts'], {
+        // detached: false,
+        // stdio: ['ignore', 'pipe', 'pipe'] 
+        detached: true, // Prozess läuft unabhängig vom Parent
+        stdio: 'ignore' // Ignoriere Standard I/O streams
+    });
 
-      // Führe Programm mit Argumenten aus
-      const { stdout, stderr } = await execAsync(`${programPath} tsx scheduler/preparePresenceAssets.ts`);
-      
-      if (stderr) {
-          console.error('Stderr:', stderr);
-          return NextResponse.json({ 
-            success: true,
-            output: stdout 
-        });
-      }
-      
-      return NextResponse.json({ 
-          success: true,
-          output: stdout 
-      });
+  //   // Logging für stdout
+  //   process.stdout.on('data', (data) => {
+  //     const output = data.toString();
+  //     // logStream.write(`[STDOUT] ${output}`);
+  //     console.log(`[NPX] ${output}`);
+  // });
+
+  // // Logging für stderr
+  // process.stderr.on('data', (data) => {
+  //     const output = data.toString();
+  //     // logStream.write(`[STDERR] ${output}`);
+  //     console.error(`[NPX] Error: ${output}`);
+  // });
+
+  // // Log wenn Prozess beendet
+  // process.on('close', (code) => {
+  //     console.log(`[NPX] Prozess beendet mit Code ${code}`);
+  // });
+
+    // Entkopple den Prozess vom Parent
+    process.unref();
+
+    // Gib sofort eine Antwort zurück
+    return NextResponse.json({ 
+        success: true,
+        message: 'Prozess gestartet',
+        pid: process.pid 
+    });
       
   } catch (error) {
       console.error('Error:', error);
