@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Asset, Template, Data, DatasOnAssets } from '@prisma/client';
 import nodeHtmlToImage from 'node-html-to-image';
 import path from 'path';
 import * as fs from 'fs/promises';
@@ -12,8 +12,33 @@ interface AssetGenerationResult {
     assetId?: string;
 }
 
+interface LessonData {
+    date: number;
+    startTime: number;
+    endTime: number;
+    longname?: string;
+    teacher?: string;
+}
+
+interface TemplateData {
+    lessons?: LessonData[];
+    [key: string]: any;
+}
+
+interface ScheduleItem extends LessonData {
+    isBreak: boolean;
+    height: number;
+}
+
+type AssetWithRelations = Asset & {
+    template: Template | null;
+    datas: (DatasOnAssets & {
+        data: Data;
+    })[];
+};
+
 export class AssetGenerator {
-    private calculateValidUntil(lessonData): Date {
+    private calculateValidUntil(lessonData: TemplateData): Date {
         const now = new Date('2024-12-19T10:00:00');
         const tomorrow = new Date('2024-12-19T10:00:00');
         tomorrow.setDate(tomorrow.getDate() + 1);
@@ -92,13 +117,19 @@ export class AssetGenerator {
         }
     }
 
-    private async regenerateAsset(asset: any): Promise<AssetGenerationResult> {
+    private async regenerateAsset(asset: AssetWithRelations): Promise<AssetGenerationResult> {
         try {
             // Prepare handlebars data from related Data models
-            const templateData = asset.datas.reduce((acc: any, dataOnAsset: any) => {
-                const jsonData = dataOnAsset.data.json;
-                return Array.isArray(acc) ? [...acc, ...jsonData] : jsonData;
-            }, {});
+            const templateData = asset.datas.reduce((acc: TemplateData, dataOnAsset: DatasOnAssets & { data: Data }) => {
+                const jsonData = dataOnAsset.data.json as TemplateData;
+                return {
+                    ...acc,
+                    ...jsonData,
+                    lessons: acc.lessons && jsonData.lessons 
+                        ? [...acc.lessons, ...jsonData.lessons]
+                        : jsonData.lessons || acc.lessons || []
+                };
+            }, { lessons: [] } as TemplateData);
 
             const validUntil = this.calculateValidUntil(templateData);
 
@@ -116,37 +147,46 @@ export class AssetGenerator {
                 `${asset.id}_${Date.now()}.png`
             );
 
-
             // Ensure directory exists
             await fs.mkdir(path.dirname(outputPath), { recursive: true });
 
             // Generate new image from HTML template
+            if (!asset.template) {
+                throw new Error('Template not found for asset');
+            }
+
             await nodeHtmlToImage({
                 output: outputPath,
                 html: asset.template.html,
                 content: templateData,
                 handlebarsHelpers: {
-                    calculateHeight: (startTime, endTime) => {
+                    calculateHeight: (startTime: number, endTime: number): number => {
                         const start = Math.floor(startTime / 100) * 60 + (startTime % 100);
                         const end = Math.floor(endTime / 100) * 60 + (endTime % 100);
                         return ((end - start) / 60) * 32; // 32px pro Stunde
                     },
-                    formatTime: (time) => {
+                    formatTime: (time: number | string): string => {
                         if (!time || time === '-') return '';
                         const timeStr = time.toString().padStart(4, '0');
                         return `${timeStr.slice(0, 2)}:${timeStr.slice(2)}`;
                     },
-                    timeSlots: () => {
+                    timeSlots: (): string[] => {
                         return Array.from({ length: 12 }, (_, i) =>
                             `${(i + 8).toString().padStart(2, '0')}:00`
                         );
                     },
-                    getCurrentLesson: (context) => {
+                    getCurrentLesson: (context: TemplateData | LessonData[]): LessonData => {
                         // Sicherstellen, dass wir mit einem Array arbeiten
-                        const lessonsArray = context.data ? context.data.root : context;
+                        const lessonsArray = (context as any).data ? (context as any).data.root : context;
                         if (!Array.isArray(lessonsArray)) {
                             console.error('No lessons array found');
-                            return null;
+                            return {
+                                date: 0,
+                                startTime: 0,
+                                endTime: 0,
+                                longname: "Pause",
+                                teacher: "-"
+                            };
                         }
 
                         const now = new Date('2024-12-19T10:40:00');
@@ -162,15 +202,16 @@ export class AssetGenerator {
                         );
 
                         return currentLesson || {
+                            date: today,
                             longname: "Pause",
                             teacher: "-",
-                            startTime: "-",
-                            endTime: "-"
+                            startTime: 0,
+                            endTime: 0
                         };
                     },
-                    getDaySchedule: (context) => {
+                    getDaySchedule: (context: TemplateData | LessonData[]): ScheduleItem[] => {
                         // Sicherstellen, dass wir mit einem Array arbeiten
-                        const lessonsArray = context.data ? context.data.root : context;
+                        const lessonsArray = (context as any).data ? (context as any).data.root : context;
                         if (!Array.isArray(lessonsArray)) {
                             console.error('No lessons array found');
                             return [];
@@ -185,20 +226,24 @@ export class AssetGenerator {
                             .filter(lesson => lesson.date === today)
                             .sort((a, b) => a.startTime - b.startTime);
 
-                        const schedule = [];
+                        const schedule: ScheduleItem[] = [];
                         let currentTime = 800; // Start bei 8:00
 
                         todayLessons.forEach(lesson => {
                             if (lesson.startTime > currentTime) {
                                 // Pause einfügen
                                 const start = Math.floor(currentTime / 100) * 60 + (currentTime % 100);
-                                const end = Math.floor(lesson.endTime / 100) * 60 + (lesson.endTime % 100);
+                                const end = Math.floor(lesson.startTime / 100) * 60 + (lesson.startTime % 100);
                                 const breakHeight = ((end - start) / 60) * 32; // 32px pro Stunde
                                 schedule.push({
                                     isBreak: true,
+                                    date: today,
+                                    startTime: currentTime,
+                                    endTime: lesson.startTime,
                                     height: breakHeight
                                 });
                             }
+                            
                             const start = Math.floor(lesson.startTime / 100) * 60 + (lesson.startTime % 100);
                             const end = Math.floor(lesson.endTime / 100) * 60 + (lesson.endTime % 100);
                             const lessonHeight = ((end - start) / 60) * 32; // 32px pro Stunde
@@ -245,14 +290,14 @@ export class AssetGenerator {
             console.error('Error regenerating asset:', error);
             return {
                 success: false,
-                message: `Failed to regenerate asset: ${error}`
+                message: `Failed to regenerate asset: ${error instanceof Error ? error.message : String(error)}`
             };
         }
     }
 }
 
 // Usage
-export const generateAssets = async () => {
+export const generateAssets = async (): Promise<void> => {
     const generator = new AssetGenerator();
     await generator.generateAssets();
 };
@@ -262,12 +307,12 @@ const isMainModule = import.meta.url === `file://${process.argv[1]}`;
 
 if (isMainModule) {
     generateAssets()
-        .then((result) => {
-            console.log('Asset generation completed successfully:');
+        .then(() => {
+            console.log('Asset generation completed successfully');
             process.exit(0);
         })
         .catch(error => {
             console.error('Asset generation failed:', error);
             process.exit(1);
-        })
+        });
 }
