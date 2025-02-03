@@ -52,7 +52,7 @@ export async function PUT(request: Request) {
 
     try {      
       // Starte den npx-Prozess
-      const process = spawn('npx', ['tsx', 'scheduler/preparePresenceAssets.ts'], {
+      const process = spawn('npx', ['tsx', 'scheduler/prepareJSONAssets.ts'], {
         // detached: false,
         // stdio: ['ignore', 'pipe', 'pipe'] 
         detached: true, // Prozess läuft unabhängig vom Parent

@@ -14,11 +14,11 @@ interface AssetGenerationResult {
 
 export class AssetGenerator {
     private calculateValidUntil(): Date {
-        const tomorrow = new Date();
-        // tomorrow.setDate(tomorrow.getDate() + 1);
-        // tomorrow.setHours(1, 0, 0);  // 01:00 Uhr am Folgetag
+        // Wird vom Benuzter angepasst, daher kann keine Voraussage getroffen werden. 
+        const inFuture = new Date();
+        inFuture.setFullYear(inFuture.getFullYear() + 255);
 
-        return tomorrow;
+        return inFuture;
     }
 
     async generateAssets(): Promise<void> {
@@ -29,13 +29,10 @@ export class AssetGenerator {
             // Find assets that will expire in the next 10 minutes
             const expiringAssets = await prisma.asset.findMany({
                 where: {
-                    // valid_until: {
-                    //     lte: new Date(Date.now() + 10 * 60 * 1000) // Current time + 10 minutes
-                    // },
                     datas: {
                         some: {
                             data: {
-                                origin_worker: "Presence"
+                                origin_worker: "JSON"
                             }
                         }
                     }
@@ -59,7 +56,7 @@ export class AssetGenerator {
         } finally {
             await prisma.$disconnect();
         }
-    }
+    } 
 
     private async regenerateAsset(asset: any): Promise<AssetGenerationResult> {
         try {

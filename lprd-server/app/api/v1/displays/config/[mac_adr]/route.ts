@@ -30,7 +30,13 @@ export async function GET(request: Request) {
                     id: oneDisplay?.currentAsset!,
                 }
             });
-            return NextResponse.json({ file_path: currentAsset?.file_path, valid_for: currentAsset?.valid_until });
+
+            let sleepTimeInuS = 18446744073709551615;
+            if (currentAsset?.valid_until != undefined) {
+                sleepTimeInuS = (currentAsset?.valid_until.getTime() - new Date().getTime()) * 1000;
+            }
+             
+            return NextResponse.json({ file_path: currentAsset?.file_path, valid_for: sleepTimeInuS });
         }
         case 'dynamic': {
             // const response = await fetch("/api/v1/assets/generate/projectday");
