@@ -30,22 +30,22 @@ export async function PUT(request: Request) {
         },
     });
 
-    if (formData.get('html')) {
-        await prisma.asset.update({
-            where: {
-                id: newAsset.id,
-            },
-            data: {
-                html: formData.get("html") as string,
-                file_path: "/uploads/" + newAsset.id + ".png",
-            },
-        });
+    // if (formData.get('html')) {
+    //     await prisma.asset.update({
+    //         where: {
+    //             id: newAsset.id,
+    //         },
+    //         data: {
+    //             html: formData.get("html") as string,
+    //             file_path: "/uploads/" + newAsset.id + ".png",
+    //         },
+    //     });
 
-        await nodeHtmlToImage({
-            output: "./public/uploads/" + newAsset.id + ".png",
-            html: formData.get("html") as string,
-        });
-    }
+    //     await nodeHtmlToImage({
+    //         output: "./public/uploads/" + newAsset.id + ".png",
+    //         html: formData.get("html") as string,
+    //     });
+    // }
 
     if (formData.get('file')) {
         const file = formData.get("file") as File;

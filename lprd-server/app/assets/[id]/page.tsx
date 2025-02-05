@@ -13,11 +13,14 @@ interface Props {
 export  default async function showAssetDetails({params}: Props) {
     const asset = await prisma.asset.findUnique({where: {id: params.id}});
 
+    const allTemplates = await prisma.template.findMany();
+    const allDatas = await prisma.data.findMany();
+
     if (!asset) {
         redirect("/assets");
     }
 
     return (
-        <AssetForm asset={asset}/>
+        <AssetForm asset={asset} allTemplates={allTemplates} allDatas={allDatas}/>
     );
 }

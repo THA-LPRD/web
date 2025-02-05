@@ -72,7 +72,7 @@ export async function PUT(request: Request) {
         }
     }
     
-    revalidatePath("/assets");
+    revalidatePath("/displays");
 
     //return Response.json({updatedAsset})
     return NextResponse.json({ message: 'Updated Asset'}, { status: 200 });

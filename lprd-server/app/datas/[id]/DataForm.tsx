@@ -68,8 +68,8 @@ export function DataForm({ data }: any) {
             <form onSubmit={updateData}>
                 <label htmlFor="friendly_name">ID</label>
                 <input type="text" name="id" id="id" defaultValue={data.id} />
-                <br />
-                <input type="text" name="outdated_at" id="outdated_at" defaultValue={data?.outdated_at ?? '600'} />
+                {/* <br />
+                <input type="text" name="outdated_at" id="outdated_at" defaultValue={data?.outdated_at ?? '600'} /> */}
                 <br />
                 <label htmlFor="json">JSON</label>
                 <br />

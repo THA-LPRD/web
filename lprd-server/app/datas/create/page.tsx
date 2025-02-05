@@ -32,8 +32,8 @@ export  default async function ShowDataDetails() {
             <form onSubmit={createData}>
                 <label htmlFor="friendly_name">ID</label>
                 <input type="text" name="id" id="id"/>
-                <br />
-                <input type="text" name="outdated_at" id="outdated_at"/>
+                {/* <br />
+                <input type="text" name="outdated_at" id="outdated_at"/> */}
                 <br />
                 <label htmlFor="json">JSON</label>
                 <br />

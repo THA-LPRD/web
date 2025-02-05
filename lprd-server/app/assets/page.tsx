@@ -14,10 +14,10 @@ export default async function showAllAssets() {
             <nav>
                 <ul>
                     <li>
-                        <Link className='asset-buttons' href={'/assets/create'}>Erstellen aus HTML</Link>
+                        <Link className='asset-buttons' href={'/assets/create'}>Erstellen</Link>
                     </li>
                     <li>
-                        <Link className='asset-buttons' href={'/assets/upload'}>Hochladen</Link>
+                        <Link className='asset-buttons' href={'/assets/upload'}>PNG hochladen</Link>
                     </li>
                 </ul>
             </nav>

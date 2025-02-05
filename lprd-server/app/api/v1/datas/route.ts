@@ -23,8 +23,8 @@ export async function PUT(request: Request) {
     const newData = await prisma.data.create({
         data: {
             id: formData.get('id') as string,
-            // outdated_at: parseInt(formData.get('valid_for') as string),
             origin_type: "JSON",
+            origin_worker: "JSON",
             json: jsonObject,
         },
     });

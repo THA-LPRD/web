@@ -31,7 +31,7 @@ export async function GET(request: Request) {
                 }
             });
 
-            let sleepTimeInuS = 18446744073709551615;
+            let sleepTimeInuS = 0;
             if (currentAsset?.valid_until != undefined) {
                 sleepTimeInuS = (currentAsset?.valid_until.getTime() - new Date().getTime()) * 1000;
             }

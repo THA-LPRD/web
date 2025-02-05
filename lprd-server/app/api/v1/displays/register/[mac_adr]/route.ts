@@ -14,6 +14,7 @@ export async function PUT(request: NextRequest) {
         data: {
             mac_adr: mac_adr,
             friendly_name: data['friendly_name'],
+            currentAssetType: 'static',
             width: data['width'],
             height: data['height'],
             last_seen: new Date(),

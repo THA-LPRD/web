@@ -58,8 +58,8 @@ h3 {
 }
 
 .display-container {
-    width: 200px;
-    height: 160px;
+    /* width: 200px;
+    height: 160px; */
     border-width: 2px;
     border-radius: 5px;
     border-color: #000;
@@ -80,7 +80,7 @@ h3 {
 }
 
 .asset-container {
-    width: 200px;
+    /* width: 200px; */
     /* height: 160px; */
     border-width: 2px;
     border-radius: 5px;

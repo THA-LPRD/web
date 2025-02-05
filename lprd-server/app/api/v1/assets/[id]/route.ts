@@ -24,26 +24,46 @@ export async function PUT(request: Request) {
     const url = new URL(request.url);
     const id = url.pathname.split("/").slice(-1)[0];
 
-    const formData = await request.formData();
-    
+    // const formData = await request.formData();
+    const data = request.headers.get('Content-Type')?.includes('application/json') 
+        ? await request.json()
+        : Object.fromEntries(await request.formData());
 
     // const friendly_name_input = formData.get('friendly_name')! as string;
 
     const updatedAsset = await prisma.asset.update({
-        where: {
-            id: id,
-        },
+        where: { id },
         data: {
-            friendly_name: formData.get('friendly_name')! as string,
-            html: formData.get('html')! as string,
-            // valid_for: parseInt(formData.get('valid_for')! as string),
+            ...(data.friendly_name && { friendly_name: data.friendly_name }),
+            ...(data.currentTemplate && {
+                template: {
+                    connect: { id: data.currentTemplate }
+                }
+            }),
+            ...(data.currentData && {
+                datas: {
+                    connectOrCreate: [{
+                        where: {
+                            assetId_dataId: {
+                                assetId: id,
+                                dataId: data.currentData
+                            }
+                        },
+                        create: {
+                            data: {
+                                connect: { id: data.currentData }
+                            }
+                        }
+                    }]
+                }
+            })
         },
     });
 
-    await nodeHtmlToImage({
-        output: "./public/uploads/" + updatedAsset.id + ".png",
-        html: updatedAsset.html as string,
-    });
+    // await nodeHtmlToImage({
+    //     output: "./public/uploads/" + updatedAsset.id + ".png",
+    //     html: updatedAsset.html as string,
+    // });
 
     revalidatePath("/assets");
 
