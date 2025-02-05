@@ -4,6 +4,7 @@
 .DS_Store
 *.png
 
+package-lock.json
 
 # dependencies
 /node_modules
