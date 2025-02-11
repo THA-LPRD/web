@@ -32,7 +32,8 @@ export class AssetGenerator {
                     datas: {
                         some: {
                             data: {
-                                origin_worker: "JSON"
+                                origin_worker: "JSON",
+                                is_outdated: true,
                             }
                         }
                     }
@@ -56,7 +57,7 @@ export class AssetGenerator {
         } finally {
             await prisma.$disconnect();
         }
-    } 
+    }
 
     private async regenerateAsset(asset: any): Promise<AssetGenerationResult> {
         try {
@@ -111,14 +112,39 @@ export class AssetGenerator {
             }
 
             // Update existing asset record
-            const updatedAsset = await prisma.asset.update({
-                where: {
-                    id: asset.id
-                },
-                data: {
-                    file_path: databaseOutputPath,
-                    valid_until: validUntil
+            // Zuerst finden wir alle betroffenen Data IDs
+            const dataIds = asset.datas
+                .filter(d => d.data.origin_worker === "JSON" && d.data.is_outdated)
+                .map(d => d.data.id);
+
+            // Dann updaten wir das Asset und die verknüpften Data Einträge
+            const updatedAsset = await prisma.$transaction(async (tx) => {
+                // Update Asset
+                const updated = await tx.asset.update({
+                    where: {
+                        id: asset.id
+                    },
+                    data: {
+                        file_path: databaseOutputPath,
+                        valid_until: validUntil
+                    }
+                });
+
+                // Update alle verknüpften Data Einträge
+                if (dataIds.length > 0) {
+                    await tx.data.updateMany({
+                        where: {
+                            id: {
+                                in: dataIds
+                            }
+                        },
+                        data: {
+                            is_outdated: false
+                        }
+                    });
                 }
+
+                return updated;
             });
 
             return {

@@ -31,16 +31,16 @@ export async function GET(request: Request) {
                 }
             });
 
-            let sleepTimeInuS = -1;
+            let sleepTimeInS = -1;
             if (currentAsset?.valid_until != undefined) {
                 if (currentAsset?.valid_until.getFullYear() > (new Date().getFullYear() + 250 ) ) {
                     let sleepTimeInuS = -1;
                 } else {
-                    sleepTimeInuS = Math.trunc((currentAsset?.valid_until.getTime() - new Date().getTime())/1000);
+                    sleepTimeInS = Math.trunc((currentAsset?.valid_until.getTime() - new Date().getTime())/1000);
                 }
             }
              
-            return NextResponse.json({ file_path: currentAsset?.file_path, valid_for: sleepTimeInuS });
+            return NextResponse.json({ file_path: currentAsset?.file_path, valid_for: sleepTimeInS });
         }
         case 'dynamic': {
             // const response = await fetch("/api/v1/assets/generate/projectday");

@@ -53,6 +53,7 @@ model Data {
   json             Json
   origin_type      Data_origin_type
   origin_worker    String?
+  is_outdated      Boolean?
   outdated_at      DateTime?
   assets           DatasOnAssets[]
 }

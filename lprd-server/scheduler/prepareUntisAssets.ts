@@ -39,8 +39,8 @@ type AssetWithRelations = Asset & {
 
 export class AssetGenerator {
     private calculateValidUntil(lessonData: TemplateData): Date {
-        const now = new Date('2024-12-19T10:00:00');
-        const tomorrow = new Date('2024-12-19T10:00:00');
+        const now = new Date('2024-12-16T12:00:00');
+        const tomorrow = new Date('2024-12-16T10:00:00');
         tomorrow.setDate(tomorrow.getDate() + 1);
         tomorrow.setHours(1, 0, 0);  // 01:00 Uhr am Folgetag
 
@@ -161,20 +161,24 @@ export class AssetGenerator {
                 content: templateData,
                 handlebarsHelpers: {
                     calculateHeight: (startTime: number, endTime: number): number => {
+                        return 20;
                         const start = Math.floor(startTime / 100) * 60 + (startTime % 100);
                         const end = Math.floor(endTime / 100) * 60 + (endTime % 100);
                         return ((end - start) / 60) * 32; // 32px pro Stunde
                     },
+                    
                     formatTime: (time: number | string): string => {
                         if (!time || time === '-') return '';
                         const timeStr = time.toString().padStart(4, '0');
                         return `${timeStr.slice(0, 2)}:${timeStr.slice(2)}`;
                     },
+                    
                     timeSlots: (): string[] => {
                         return Array.from({ length: 12 }, (_, i) =>
                             `${(i + 8).toString().padStart(2, '0')}:00`
                         );
                     },
+                    
                     getCurrentLesson: (context: TemplateData | LessonData[]): LessonData => {
                         // Sicherstellen, dass wir mit einem Array arbeiten
                         const lessonsArray = (context as any).data ? (context as any).data.root : context;
@@ -185,30 +189,31 @@ export class AssetGenerator {
                                 startTime: 0,
                                 endTime: 0,
                                 longname: "Pause",
-                                teacher: "-"
+                                teachers: []
                             };
                         }
-
-                        const now = new Date('2024-12-19T10:40:00');
+                
+                        const now = new Date('2024-12-16T10:00:00');
                         const today = now.getFullYear() * 10000 +
                             (now.getMonth() + 1) * 100 +
                             now.getDate();
                         const currentTime = now.getHours() * 100 + now.getMinutes();
-
+                
                         const currentLesson = lessonsArray.find(lesson =>
                             lesson.date === today &&
                             currentTime >= lesson.startTime &&
                             currentTime <= lesson.endTime
                         );
-
+                
                         return currentLesson || {
                             date: today,
                             longname: "Pause",
-                            teacher: "-",
+                            teachers: [],
                             startTime: 0,
                             endTime: 0
                         };
                     },
+                    
                     getDaySchedule: (context: TemplateData | LessonData[]): ScheduleItem[] => {
                         // Sicherstellen, dass wir mit einem Array arbeiten
                         const lessonsArray = (context as any).data ? (context as any).data.root : context;
@@ -216,47 +221,34 @@ export class AssetGenerator {
                             console.error('No lessons array found');
                             return [];
                         }
-
+                
                         const now = new Date();
                         const today = now.getFullYear() * 10000 +
                             (now.getMonth() + 1) * 100 +
                             now.getDate();
-
+                
+                        // Filtere die Lektionen für heute und sortiere sie nach Startzeit
                         const todayLessons = lessonsArray
                             .filter(lesson => lesson.date === today)
                             .sort((a, b) => a.startTime - b.startTime);
-
-                        const schedule: ScheduleItem[] = [];
-                        let currentTime = 800; // Start bei 8:00
-
-                        todayLessons.forEach(lesson => {
-                            if (lesson.startTime > currentTime) {
-                                // Pause einfügen
-                                const start = Math.floor(currentTime / 100) * 60 + (currentTime % 100);
-                                const end = Math.floor(lesson.startTime / 100) * 60 + (lesson.startTime % 100);
-                                const breakHeight = ((end - start) / 60) * 32; // 32px pro Stunde
-                                schedule.push({
-                                    isBreak: true,
-                                    date: today,
-                                    startTime: currentTime,
-                                    endTime: lesson.startTime,
-                                    height: breakHeight
-                                });
-                            }
-                            
+                
+                        // Direkt die Höhe für jede Lektion berechnen
+                        return todayLessons.map(lesson => {
                             const start = Math.floor(lesson.startTime / 100) * 60 + (lesson.startTime % 100);
                             const end = Math.floor(lesson.endTime / 100) * 60 + (lesson.endTime % 100);
-                            const lessonHeight = ((end - start) / 60) * 32; // 32px pro Stunde
-                            schedule.push({
-                                isBreak: false,
+                            const height = ((end - start) / 60) * 32; // 32px pro Stunde
+                            console.log('Lesson height:', height);
+                            console.log('Lesson:', lesson);
+                            
+                            return {
                                 ...lesson,
-                                height: lessonHeight
-                            });
-
-                            currentTime = lesson.endTime;
+                                height: height
+                            };
                         });
-
-                        return schedule;
+                    },
+                    
+                    eq: (a: any, b: any): boolean => {
+                        return a === b;
                     }
                 }
             });

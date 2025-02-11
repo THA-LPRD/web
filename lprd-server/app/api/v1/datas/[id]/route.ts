@@ -46,6 +46,7 @@ export async function PUT(request: Request) {
         data: {
             id: formData.get('id')! as string,
             json: jsonObject,
+            is_outdated: true,
             // outdated_at: parseInt(formData.get('outdated_at')! as string),
         },
     });
